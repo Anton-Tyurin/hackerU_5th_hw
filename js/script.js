@@ -1,174 +1,397 @@
-var INPUT_STRING = document.getElementById('sampleInput');
-var RESULT_STRING = document.createElement('span');
+console.clear()
+/*For render options*/
+let OPTION_ID = "defaultOption";
+const OPTIONS_CONTAINER = document.getElementById('optionsMenu')
+const ADDITIONAL_INPUT = document.getElementById('additionalInput')
+/*For render options - numbers*/
+const ARRAY_OPTIONS_NUMBERS_ID = ["defaultOption", "lesserThanAverage", "evenVal", "notEvenVal",
+  "maxVal", "minVal", "twoMinValues", "clearedByRange", "sumAfterNegative", "minByModule"
+]
+const ARRAY_OPTIONS_NUMBERS_LABLES = ["Default", "Get lesser than average", "Get even numbers",
+  "Get not even numbers", "Get max value", "Get min value", "Get two min values", "Get cleared by range",
+  "Get sum after negative", "Get min by module"
+]
+
+/*For render options - strings*/
+const ARRAY_OPTIONS_STRINGS_ID = ["defaultOption", "maxSentence", "findAndReplase", "delDubSeparator",
+  "numbersArr", "palindrome", "amountOfCases", "maxWord"
+]
+const ARRAY_OPTIONS_STRINGS_LABLES = ["Default", "Get max sentence",
+  "Find and replace", "Delete duplicate separator",
+  "Get array of numbers", "Find is it palindrome", "Get amount of cases", "Get max word"
+]
+
+/*For render result*/
+
+const INPUT_STRING = document.getElementById('sampleInput');
+const RESULT_STRING = document.createElement('span');
 RESULT_STRING.style = "class=result";
-var ARRAY_VALUES = [];
-var MAIN_CONTAINER = document.getElementById('mainContainer');
-var BODY_CONTAINER = document.getElementById('bodyContainer');
-var RESULT_BOX = document.getElementById('resultBox');
-var STRING_MENU = document.getElementById('stringFlag');
-var STRING_MENU_BOX = document.getElementById('stringMenu');
-var EVEN_SELECT = document.getElementById('selectEven');
-var NUMBERS_MENU = document.getElementById('numbersMenu')
-var NUMBERS_MENU_HEADER = document.getElementById('numbersMenuBox')
-var NUMBERS_MENU_BOX = document.getElementById('numbersMenuBox')
-var MIN_VAL = document.getElementById('minVal');
-var MAX_VAL = document.getElementById('maxVal');
-var MIN_VAL_BOX = document.getElementById('minValBox');
-var MAX_VAL_BOX = document.getElementById('maxValBox');
-var MIN_MAX_CHECKBOX = document.getElementById('minMaxVal')
-var COUNT_LETTERS = document.getElementById('countLetters')
-var MAX_WORD = document.getElementById('maxWord')
-var SWITCH_LANG_BTN = document.getElementById('switchBtn')
-var LANG_STATE_ENG = true;
-var PALLETE_BAR = document.getElementById('palleteBar');
-var PALLETE_CHECKBOX = document.getElementById('changePallete');
-/*For russian */
-var MAIN_HEADER_TEXT = document.getElementById('mainHeader');
-var INPUT_HEADER_TEXT = document.getElementById('inputHeader');
-var STRING_MENU_TEXT = document.getElementById('stringFlagDescription');
-var COUNT_LETTERS_TEXT = document.getElementById('countLettersDescription');
-var MAX_WORD_TEXT = document.getElementById('maxWordDescription');
-var NUMBERS_MENU_TEXT = document.getElementById('numbersMenuDescription');
-var NUMBERS_MENU_HEADER_TEXT = document.getElementById('numbersMenuHeader');
-var EVEN_TEXT = document.getElementById('evenDescription');
-var NOT_EVEN_TEXT = document.getElementById('notEvenDescription');
-var MIN_MAX_CHECKBOX_TEXT = document.getElementById('minMaxValDescription');
-var MAX_VAL_TEXT = document.getElementById('maxValDescription');
-var MIN_VAL_TEXT = document.getElementById('minValDescription');
-var HANDLE_BTN = document.getElementById('hadleBtn');
-var RESULT_TEXT = document.getElementById('resultHeader');
-var PALLETE_CHECKBOX_TEXT = document.getElementById('changePalleteDescription');
-/*For colors */
-var THEME_DEFAULT = document.getElementById('themeDefault');
-var THEME_BLUE = document.getElementById('themeBlue');
-var THEME_GREEN = document.getElementById('themeGreen');
-var THEME_YELLOW = document.getElementById('themeYellow');
-var THEME_DARK = document.getElementById('themeDark');
+let ARRAY_VALUES = [];
+const RESULT_BOX = document.getElementById('resultBox');
 
 
+/*For russian language*/
 
-function displayCountLetters() {
-  if (COUNT_LETTERS.checked) {
-    MAX_WORD.disabled = true;
+const MAIN_HEADER_TEXT = document.getElementById('mainHeader');
+const INPUT_HEADER_TEXT = document.getElementById('inputHeader');
+const STRING_MENU_TEXT = document.getElementById('stringFlagDescription');
+const COUNT_LETTERS_TEXT = document.getElementById('countLettersDescription');
+const MAX_WORD_TEXT = document.getElementById('maxWordDescription');
+const NUMBERS_MENU_TEXT = document.getElementById('numbersMenuDescription');
+const NUMBERS_MENU_HEADER_TEXT = document.getElementById('numbersMenuHeader');
+const EVEN_TEXT = document.getElementById('evenDescription');
+const NOT_EVEN_TEXT = document.getElementById('notEvenDescription');
+const MIN_MAX_CHECKBOX_TEXT = document.getElementById('minMaxValDescription');
+const MAX_VAL_TEXT = document.getElementById('maxValDescription');
+const MIN_VAL_TEXT = document.getElementById('minValDescription');
+const HANDLE_BTN = document.getElementById('hadleBtn');
+const RESULT_TEXT = document.getElementById('resultHeader');
+const PALLETE_CHECKBOX_TEXT = document.getElementById('changePalleteDescription');
+const SWITCH_LANG_BTN = document.getElementById('switchBtn')
+let LANG_STATE_ENG = true;
+const NUMBERS_MENU_HEADER = document.getElementById('numbersMenuBox')
+const NUMBERS_MENU_BOX = document.getElementById('numbersMenuBox')
+const MIN_VAL_BOX = document.getElementById('minValBox');
+const MAX_VAL_BOX = document.getElementById('maxValBox');
+
+/*For colors change*/
+
+const PALLETE_BAR = document.getElementById('palleteBar');
+const MAIN_CONTAINER = document.getElementById('mainContainer');
+const BODY_CONTAINER = document.getElementById('bodyContainer');
+const THEME_DEFAULT = document.getElementById('themeDefault');
+const THEME_BLUE = document.getElementById('themeBlue');
+const THEME_GREEN = document.getElementById('themeGreen');
+const THEME_YELLOW = document.getElementById('themeYellow');
+const THEME_DARK = document.getElementById('themeDark');
+
+/*Flags and selected*/
+
+const STRING_MENU = document.getElementById('stringFlag');
+const MIN_VAL = document.getElementById('minVal');
+const MAX_VAL = document.getElementById('maxVal');
+const COUNT_LETTERS = document.getElementById('countLetters')
+const MAX_WORD = document.getElementById('maxWord')
+const PALLETE_CHECKBOX = document.getElementById('changePallete');
+const NUMBERS_MENU = document.getElementById('numbersMenu');
+
+/*String prototipes*/
+String.prototype.reverse = function() {
+  return this.split("").reverse().join("")
+}
+
+String.prototype.replaсeMy = function(targetString, replaceString) {
+  let str = this;
+  let target = targetString === undefined ? document.getElementById("targetInput").value : targetString;
+  let replace = replaceString === undefined ? document.getElementById("replaceInput").value : replaceString;
+  let pos = 0;
+  while (true) {
+    var foundPos = this.indexOf(target, pos);
+    if (foundPos == -1) break;
+    str = str.split("");
+    str.splice(foundPos, target.length, replace)
+    str = str.join("");
+    pos = foundPos + 1;
+  }
+  return str;
+}
+
+String.prototype.delDub = function(separators) {
+  let str = this;
+  let separatorsStr = separators === undefined ? document.getElementById("separatorInput").value : targetString;
+  let dubCounter = 0;
+  let start = 0;
+  str = str.split("");
+  separatorsStr = separatorsStr.split("");
+  for (var i = 0; i < str.length; i++) {
+    for (var j = 0; j < separatorsStr.length; j++) {
+      if (str[i] === separatorsStr[j]) {
+        start = i;
+        if (str[i + 1] === separatorsStr[j]) {
+          while (str[i + 1] === separatorsStr[j]) {
+            ++dubCounter;
+            i++
+          }
+          console.log(i);
+          console.log(dubCounter);
+          console.log("here");
+          str.splice(start, dubCounter + 1);
+          dubCounter = 0;
+          start = 0;
+        }
+      }
+    }
+  }
+  str = str.join("")
+  return str;
+}
+
+
+/*Render options*/
+
+function renderOptions(arrID, arrValues) {
+  OPTIONS_CONTAINER.innerHTML = '';
+  let strResult = '';
+
+  if (arrID.length !== arrValues.length) {
+    OPTIONS_CONTAINER.innerHTML = '<li class="list-group-item"><span class="text-secondary">Illegal values</span></li>';
+    return false;
+  }
+
+  for (var i = 0; i < arrID.length; i++) {
+    strResult += '<div class="options_item">' +
+      '<input type="radio" class="options_radio" name="option" value="' + arrID[i] + '" id="' + arrID[i] + '" onclick="toogleOptionID(this)">' +
+      '<label for="' + arrID[i] + '">' + arrValues[i] + '</label>' + '</div>'
+  }
+  OPTIONS_CONTAINER.innerHTML = strResult;
+  document.getElementById("defaultOption").checked = true;
+}
+
+function renderAdditionalInput(type) {
+  ADDITIONAL_INPUT.innerHTML = '';
+  let strResult = '';
+  if (type === "clearedByRange") {
+    strResult = '<div class="input_a_range">' +
+      '<label for="aRange">a: </label>' +
+      '<input type="text" name="range" id="aRange">' +
+      "</div>" +
+      '<div class="input_b_range">' +
+      '<label for="bRange">b: </label>' +
+      '<input type="text" name="range" id="bRange">' +
+      "</div>"
+  } else if (type === "maxSentence") {
+    INPUT_STRING.classList.add("hidden");
+    strResult = '<textarea rows="8" cols="80" class="textSentence" id="textSentence">' + '</textarea>'
+  } else if (type === "findAndReplase") {
+    strResult = '<label for="targetInput" id="inputHeader" class="input_header">Enter target to replace:</label>' +
+      '<input type="text" name="targetInput" class="main_input" id="targetInput">' +
+      '<label for="replaceInput" id="inputHeader" class="input_header">Enter text to replace:</label>' +
+      '<input type="text" name="replaceInput" class="main_input" id="replaceInput">'
+  } else if (type === "delDubSeparator") {
+    strResult = '<label for="separatorInput" id="inputHeader" class="input_header">Enter separators:</label>' +
+      '<input type="text" name="separatorInput" class="main_input" id="separatorInput">'
+  }
+  ADDITIONAL_INPUT.innerHTML = strResult;
+  ADDITIONAL_INPUT.classList.remove("hidden");
+}
+/*Toogler for opitons ID*/
+
+function toogleOptionID(elem) {
+  INPUT_STRING.classList.remove("hidden");
+  ADDITIONAL_INPUT.classList.add("hidden");
+  OPTION_ID = elem.id;
+  if (OPTION_ID === "clearedByRange" ||
+    OPTION_ID === "maxSentence" ||
+    OPTION_ID === "findAndReplase" ||
+    OPTION_ID === "delDubSeparator") {
+    renderAdditionalInput(OPTION_ID);
+    changeBarHeight()
+  }
+  changeBarHeight()
+}
+
+/*Main handler*/
+
+function handler() {
+  ARRAY_VALUES = []
+  if (STRING_MENU.checked) {
+
+    if (validateString() === false) {
+      return false;
+    }
+
+    switch (document.getElementById(OPTION_ID).checked) {
+      case OPTION_ID === "maxSentence":
+        ARRAY_VALUES = getMaxSentence(ARRAY_VALUES);
+        renderResult()
+        break;
+      case OPTION_ID === "findAndReplase":
+        ARRAY_VALUES = ARRAY_VALUES.join(" ");
+        console.log(ARRAY_VALUES);
+        ARRAY_VALUES = ARRAY_VALUES.replaсeMy();
+        renderResult();
+        break;
+      case OPTION_ID === "delDubSeparator":
+        ARRAY_VALUES = ARRAY_VALUES.join(" ");
+        ARRAY_VALUES = ARRAY_VALUES.delDub();
+        renderResult();
+        break;
+      case OPTION_ID === "numbersArr":
+        ARRAY_VALUES = getNumbersArr(ARRAY_VALUES)
+        renderResult();
+        break;
+      case OPTION_ID === "palindrome":
+        ARRAY_VALUES = checkPandilome(ARRAY_VALUES);
+        renderResult();
+        break;
+      case OPTION_ID === "amountOfCases":
+        ARRAY_VALUES = letterCounter(ARRAY_VALUES.join(""))
+        renderResult()
+        break;
+      case OPTION_ID === "maxWord":
+        ARRAY_VALUES = getMaxWord(ARRAY_VALUES);
+        renderResult()
+        break;
+      case OPTION_ID === "defaultOption":
+        renderResult()
+    }
+  } else if (NUMBERS_MENU.checked) {
+    if (validateNumber() === false) {
+      return false;
+    }
+    switch (document.getElementById(OPTION_ID).checked) {
+      case OPTION_ID === "lesserThanAverage":
+        ARRAY_VALUES = lesserThanAverage(ARRAY_VALUES)
+        renderResult();
+        break;
+      case OPTION_ID === "evenVal":
+        ARRAY_VALUES = getEven(ARRAY_VALUES);
+        renderResult();
+        break;
+      case OPTION_ID === "notEvenVal":
+        ARRAY_VALUES = getNotEven(ARRAY_VALUES);
+        renderResult();
+        break;
+      case OPTION_ID === "maxVal":
+        ARRAY_VALUES = ARRAY_VALUES.sort(compareNumeric)[ARRAY_VALUES.length - 1]
+        renderResult()
+        break;
+      case OPTION_ID === "minVal":
+        ARRAY_VALUES = ARRAY_VALUES.sort(compareNumeric)[0]
+        renderResult()
+        break;
+      case OPTION_ID === "twoMinValues":
+        if (ARRAY_VALUES.sort(compareNumeric)[1] !== undefined &&
+          ARRAY_VALUES.sort(compareNumeric)[0] !== "") {
+          ARRAY_VALUES = [ARRAY_VALUES.sort(compareNumeric)[0], ARRAY_VALUES.sort(compareNumeric)[1]]
+          renderResult()
+        } else {
+          renderResult("You entered only one or Illegal numbers")
+        }
+        break;
+      case OPTION_ID === "clearedByRange":
+        let a = document.getElementById("aRange").value;
+        let b = document.getElementById("bRange").value;
+        ARRAY_VALUES = getClearedArr(ARRAY_VALUES, a, b);
+        renderResult()
+        break;
+      case OPTION_ID === "sumAfterNegative":
+        ARRAY_VALUES = sumAfterMinus(ARRAY_VALUES);
+        renderResult()
+        break;
+      case OPTION_ID === "minByModule":
+        ARRAY_VALUES = compareNumericAbs(ARRAY_VALUES);
+        renderResult();
+        break;
+      case OPTION_ID === "defaultOption":
+        renderResult()
+    }
   } else {
-    MAX_WORD.disabled = false;
+    if (LANG_STATE_ENG) {
+      ARRAY_VALUES = "You must choose an option to continue";
+    } else {
+      ARRAY_VALUES = 'Выберите опцию чтобы продолжить';
+    }
+    renderResult()
   }
 }
 
-function displayMaxWord() {
-  if (MAX_WORD.checked) {
-    COUNT_LETTERS.disabled = true;
-  } else {
-    COUNT_LETTERS.disabled = false;
-  }
+/*Display content fucntions*/
+
+function changeBarHeight() {
+  PALLETE_BAR.style.height = MAIN_CONTAINER.clientHeight + "px";
 }
 
 function displayNumbersMenu() {
   if (NUMBERS_MENU.checked) {
-    NUMBERS_MENU_HEADER.classList.remove("hidden");
-    NUMBERS_MENU_BOX.classList.remove("hidden");
-    STRING_MENU.disabled = true;
+    OPTIONS_CONTAINER.classList.remove("hidden");
+    renderOptions(ARRAY_OPTIONS_NUMBERS_ID, ARRAY_OPTIONS_NUMBERS_LABLES)
+    changeBarHeight();
+    STRING_MENU.checked = false;
+
   } else {
-    NUMBERS_MENU_HEADER.classList.add("hidden")
-    NUMBERS_MENU_BOX.classList.add("hidden")
-    STRING_MENU.disabled = false;
+    INPUT_STRING.classList.remove("hidden");
+    ADDITIONAL_INPUT.classList.add("hidden");
+    OPTIONS_CONTAINER.classList.add("hidden")
   }
 }
 
 function displayStringMenu() {
   if (STRING_MENU.checked) {
-    STRING_MENU_BOX.classList.remove("hidden")
-    NUMBERS_MENU.disabled = true;
+    OPTIONS_CONTAINER.classList.remove("hidden");
+    renderOptions(ARRAY_OPTIONS_STRINGS_ID, ARRAY_OPTIONS_STRINGS_LABLES)
+    console.log(PALLETE_BAR.style.heigth);
+    changeBarHeight();
+    NUMBERS_MENU.checked = false;
   } else {
-    STRING_MENU_BOX.classList.add("hidden")
-    NUMBERS_MENU.disabled = false;
+    INPUT_STRING.classList.remove("hidden");
+    ADDITIONAL_INPUT.classList.add("hidden");
+    OPTIONS_CONTAINER.classList.add("hidden")
   }
 }
 
-function getMinMaxVal() {
-  if (MIN_MAX_CHECKBOX.checked) {
-    MIN_VAL_BOX.classList.remove("hidden")
-    MAX_VAL_BOX.classList.remove("hidden")
+function activatePalleteBar() {
+  if (PALLETE_CHECKBOX.checked) {
+    PALLETE_BAR.classList.remove("hidden")
   } else {
-    MIN_VAL_BOX.classList.add("hidden")
-    MAX_VAL_BOX.classList.add("hidden")
+    PALLETE_BAR.classList.add("hidden")
   }
 }
 
-function changeEven() {
-  var selectedOption = EVEN_SELECT.value;
-  if (selectedOption === "not_even") {
-    EVEN_SELECT.selectedIndex = 1;
-  } else {
-    EVEN_SELECT.selectedIndex = 0;
-  }
-}
 
-function handler() {
-  if (STRING_MENU.checked) {
-    validateString();
-  } else if (NUMBERS_MENU.checked) {
-    validateNumber();
-  } else {
-
-    ARRAY_VALUES = "You must choose an option to continue";
-    renderResult()
-  }
-}
-
+/*Validator for stirngs*/
 
 function validateString() {
-  var stringToArr = INPUT_STRING.value.split("")
-  var temp = [];
+  let stringToArr;
+  if (INPUT_STRING.classList.contains("hidden")) {
+    if (document.getElementById("textSentence") !== null && document.getElementById("textSentence").value.length >= 1) {
+      stringToArr = document.getElementById("textSentence").value.split("")
+    }
+  } else {
+    stringToArr = INPUT_STRING.value.split("")
+  }
+  let temp = [];
   for (var i = 0; i < stringToArr.length; i++) {
-    if (stringToArr[i] === " " &&
-      (temp !== []) &&
-      stringToArr[i - 1] !== undefined &&
-      stringToArr[i - 1] !== " ") {
-      ARRAY_VALUES.push(temp.join(""))
-      temp = [];
+    if (stringToArr[i] === " ") {
+      if (stringToArr[i - 1] === undefined) {
+        temp.shift();
+      } else if ((temp !== []) &&
+        stringToArr[i - 1] !== undefined &&
+        stringToArr[i - 1] !== " ") {
+        ARRAY_VALUES.push(temp.join(""))
+        temp = [];
+      }
     } else {
       temp.push(stringToArr[i]);
     }
   }
   ARRAY_VALUES.push(temp.join(""));
-  if (ARRAY_VALUES[0] === "") {
-    if (LANG_STATE_ENG) {
-      ARRAY_VALUES = 'Enter a string starts with symbol';
-    } else {
-      ARRAY_VALUES = 'Введите строку начинающуюся с символа';
-    }
-    renderResult();
-  }
-  if (COUNT_LETTERS.checked) {
-    ARRAY_VALUES = letterCounter(ARRAY_VALUES.join(""))
-    renderResult();
-  } else if (MAX_WORD.checked) {
-    ARRAY_VALUES = getMaxWord(ARRAY_VALUES)
-    renderResult();
-  }
 }
 
+
+/*Stirngs fucntions*/
+
 function getMaxWord(arr) {
-  var resultMaxWords = [];
-  var maxLength;
+  console.clear();
+  let resultMaxWords = [];
+  let maxLength = arr[0].length;
   for (var i = 0; i < arr.length; i++) {
-    maxLength = arr[0].length;
     if (arr[i].length > maxLength) {
       maxLength = arr[i].length;
       resultMaxWords = [];
       resultMaxWords.push(arr[i]);
-    } else if (arr[i].length === maxLength)
+    } else if (arr[i].length === maxLength) {
       resultMaxWords.push(arr[i]);
+    }
   }
   return resultMaxWords;
 }
 
 function letterCounter(str) {
-  var lowerCase = 0;
-  var upperCase = 0;
-  var alphabetLower;
-  var aplhabetUpper;
+  let lowerCase = 0;
+  let upperCase = 0;
+  let alphabetLower;
+  let aplhabetUpper;
   if (LANG_STATE_ENG) {
     alphabetLower = "abcdefghijklmnopqrstuvwxyz"
     aplhabetUpper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -176,8 +399,8 @@ function letterCounter(str) {
     alphabetLower = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя"
     aplhabetUpper = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"
   }
-  var arLow = alphabetLower.split("");
-  var arUpp = aplhabetUpper.split("");
+  let arLow = alphabetLower.split("");
+  let arUpp = aplhabetUpper.split("");
   for (var i = 0; i < str.length; i++) {
     if (arLow.indexOf(str[i]) > -1) {
       lowerCase = lowerCase + 1;
@@ -185,7 +408,7 @@ function letterCounter(str) {
       upperCase = upperCase + 1;
     }
   }
-  var result;
+  let result;
   if ((str.length > 0) && (lowerCase === 0) && (upperCase === 0)) {
     if (LANG_STATE_ENG) {
       result = 'You must use only English aplhabet';
@@ -195,7 +418,7 @@ function letterCounter(str) {
     return result;
   }
   if (LANG_STATE_ENG) {
-    result = "The amount of English lowerCases: " + lowerCase +
+    result = "\<span class=result\>" + "The amount of English lowerCases: " + lowerCase + " \<\/span\>" +
       "\<br\>" + "\<span class=result\>" + "The amount of English upperCases: " + upperCase + "\<\/span\>";
   } else {
     result = "Количество Русских строчных букв: " + lowerCase +
@@ -204,24 +427,121 @@ function letterCounter(str) {
   return result;
 }
 
+
+function getMaxSentence(arr) {
+  let positionOfMax = [];
+  let maxLength;
+  let parsedArr = arr.join("").split("");
+  let result = [];
+  let temp = []
+  for (var i = 0; i < parsedArr.length; i++) {
+    if (parsedArr[i] === ".") {
+      result.push(temp.join(""));
+      temp = [];
+    } else {
+      temp.push(parsedArr[i]);
+    }
+  }
+  maxLength = result[0].length;
+  for (var i = 0; i < result.length; i++) {
+    if (result[i].length > maxLength) {
+      maxLength = result[i].length;
+      positionOfMax = [];
+      positionOfMax[0] = i + 1;
+    } else if (result[i].length === maxLength && result.length > 1) {
+      positionOfMax.push(i + 1)
+    }
+  }
+  return "position of max sentences: " + positionOfMax;
+}
+
+function checkPandilome(arr) {
+  let middleOfArr;
+  let parsedArr = arr.join("").split("");
+  if (parsedArr.length % 2 === 1) {
+    return "Not pandilome!"
+  }
+  middleOfArr = parsedArr.length / 2;
+  parsedArr = parsedArr.join("");
+  let firstHalf = parsedArr.substring(0, middleOfArr)
+  let secondHalf = parsedArr.substring(middleOfArr).reverse();
+  if (firstHalf === secondHalf) {
+    return arr + " is pandilome!"
+  } else {
+    return arr + " is not pandilome!"
+  }
+}
+
+function getNumbersArr(arr) {
+  arr = arr.join("").split("");
+  let result = [];
+  let temp = [];
+  let dotsCounter = 0;
+  let minusCounter = 0;
+  for (var i = 0; i < arr.length; i++) {
+    if (isFinite(arr[i])) {
+      temp.push(arr[i])
+    } else if (arr[i] === "-" &&
+      minusCounter < 1 &&
+      arr[i + 1] !== undefined &&
+      isFinite(arr[i + 1])) {
+      temp.push(arr[i]);
+      ++minusCounter;
+    } else if (arr[i] === "." &&
+      dotsCounter < 1 &&
+      arr[i + 1] !== undefined &&
+      isFinite(arr[i + 1]) &&
+      arr[i - 1] !== undefined &&
+      isFinite(arr[i - 1])
+    ) {
+      temp.push(arr[i]);
+      ++dotsCounter;
+    } else if (temp.length >= 1) {
+      result.push(temp.join(""));
+      temp = [];
+      dotsCounter = 0;
+      minusCounter = 0;
+    }
+    if (temp.length >= 1 && arr[i + 1] === undefined) {
+      result.push(temp.join(""));
+      temp = [];
+      dotsCounter = 0;
+      minusCounter = 0;
+    }
+  }
+  if (result.length < 1) {
+    return "there is no numbers"
+  }
+  return result
+}
+
+/*Validator for numbers*/
+
+
+
 function validateNumber() {
-  var stringToArr = INPUT_STRING.value.split("")
-  var temp = [];
-  var dotsCounter = null;
+  let stringToArr = INPUT_STRING.value.split("")
+  let temp = [];
+  let dotsCounter = 0;
+  let minusCounter = 0;
+
   for (var i = 0; i < stringToArr.length; i++) {
     if (isFinite(stringToArr[i]) ||
       stringToArr[i] === " " ||
       stringToArr[i] === ";" ||
       stringToArr[i] === "," ||
-      stringToArr[i] === '.') {
+      stringToArr[i] === '.' ||
+      stringToArr[i] === '-') {
       if (isFinite(stringToArr[i]) && (stringToArr[i] !== " ")) {
         temp.push(stringToArr[i])
       } else if (stringToArr[i] === '.') {
-
-        if (dotsCounter < 1) {
+        if ((isFinite(stringToArr[i - 1]) &&
+            (stringToArr[i - 1] !== " ")) &&
+          (isFinite(stringToArr[i + 1]) &&
+            (stringToArr[i + 1] !== " ")) &&
+          (dotsCounter < 1)) {
           ++dotsCounter
           temp.push(stringToArr[i])
-
         } else {
           RESULT_BOX.style = "color: red";
           if (LANG_STATE_ENG) {
@@ -229,11 +549,31 @@ function validateNumber() {
           } else {
             renderResult("Лишняя точка на позиции: " + (i + 1));
           }
-          dotsCounter = null;
+          dotsCounter = 0;
           return false;
         }
 
-      } else if ((temp !== []) &&
+      } else if ((stringToArr[i] === '-')) {
+        if ((stringToArr[i - 1] === " " ||
+            stringToArr[i - 1] === ";" ||
+            stringToArr[i - 1] === "," ||
+            stringToArr[i - 1] === undefined) &&
+          (minusCounter < 1) &&
+          (isFinite(stringToArr[i + 1]) &&
+            (stringToArr[i + 1] !== " "))) {
+          temp.push(stringToArr[i]);
+          ++minusCounter
+        } else {
+          RESULT_BOX.style = "color: red";
+          if (LANG_STATE_ENG) {
+            renderResult("Additional minus at position: " + (i + 1));
+          } else {
+            renderResult("Лишний минус на позиции: " + (i + 1));
+          }
+          minusCounter = 0;
+          return false;
+        }
+      } else if ((temp.length >= 1) &&
 
         (stringToArr[i - 1] !== " " &&
           stringToArr[i - 1] !== ";" &&
@@ -241,6 +581,8 @@ function validateNumber() {
           stringToArr[i - 1] !== undefined)) {
         ARRAY_VALUES.push(+temp.join(""))
         temp = [];
+        dotsCounter = 0;
+        minusCounter = 0;
       }
     } else {
       if (LANG_STATE_ENG) {
@@ -251,33 +593,32 @@ function validateNumber() {
       return false;
     }
   }
-  ARRAY_VALUES.push(temp.join(""));
-  if (NUMBERS_MENU.checked && EVEN_SELECT.selectedIndex === 0) {
-    ARRAY_VALUES = getEven(ARRAY_VALUES)
-    if (MIN_MAX_CHECKBOX.checked) {
-      if (MAX_VAL.checked) {
-        ARRAY_VALUES = ARRAY_VALUES.sort(compareNumeric)[ARRAY_VALUES.length - 1]
-      } else if (MIN_VAL.checked) {
-        ARRAY_VALUES = ARRAY_VALUES.sort(compareNumeric)[0]
-      }
-    }
-
-  } else if (NUMBERS_MENU.checked && EVEN_SELECT.selectedIndex === 1) {
-    ARRAY_VALUES = getNotEven(ARRAY_VALUES);
-    if (MIN_MAX_CHECKBOX.checked) {
-      if (MAX_VAL.checked) {
-        ARRAY_VALUES = ARRAY_VALUES.sort(compareNumeric)[ARRAY_VALUES.length - 1]
-      } else if (MIN_VAL.checked) {
-        ARRAY_VALUES = ARRAY_VALUES.sort(compareNumeric)[0]
-      }
-    }
+  if ((temp.length >= 1 || ARRAY_VALUES.length >= 1) && temp[0] !== undefined) {
+    ARRAY_VALUES.push(+temp.join(""));
+  } else {
+    renderResult("The array is empty or illegal symbol (check for additional space at the end of string)");
+    return false;
   }
-  renderResult();
 }
+
+/*Numbers functions*/
 
 function compareNumeric(a, b) {
   return a - b;
 }
+
+function compareNumericAbs(array) {
+  let position = 1;
+  let min_elem = array[0];
+  for (var i = 0; i < array.length; i++) {
+    if (array[i - 1] !== undefined && (Math.abs(array[i]) < Math.abs(min_elem))) {
+      position = i + 1;
+      min_elem = array[i];
+    }
+  }
+  return "position of minimal element (" + min_elem + ") is: " + position;
+}
+
 
 function getEven(arr) {
   return arr.filter(function(number) {
@@ -291,9 +632,62 @@ function getNotEven(arr) {
   });
 }
 
+
+function arrSum(array) {
+  return array.reduce(function(acc, item) {
+    return acc + item;
+  });
+}
+
+function arrMiddleValue(array) {
+  return arrSum(array) / array.length;
+};
+
+function lesserThanAverage(array) {
+  return array.filter(function(arrItem) {
+    return arrItem < (arrMiddleValue(array));
+  });
+}
+
+function sumAfterMinus(array) {
+  let minusCounter = 0;
+  let result = [];
+  for (var i = 0; i < array.length; i++) {
+    if (minusCounter >= 1) {
+      result.push(array[i])
+    } else if (array[i] < 0) {
+      ++minusCounter
+    }
+  }
+  if (result.length < 1) {
+    return renderResult("Result is empty. Probably you didn't use negative numbers or use only one.")
+  }
+  return result.reduce(function(acc, item) {
+    return acc + Math.abs(item);
+  });
+}
+
+function getClearedArr(array, a, b) {
+  if (array.length === 0) {
+    return renderResult("The array is empty")
+  } else if (a === "" || a === " " || !(isFinite(a))) {
+    return renderResult("a range is illegal")
+  } else if (b === "" || b === " " || !(isFinite(b))) {
+    return renderResult("b range is illegal")
+  }
+  for (var i = 0; i < array.length; i++) {
+    if (array[i] >= a && array[i] <= b) {
+      array[i] = 0;
+    }
+  }
+  return array;
+}
+
+/*Render function*/
+
 function renderResult(message) {
-  if (ARRAY_VALUES[ARRAY_VALUES.length - 1] === '') {
-    ARRAY_VALUES.pop()
+  if (ARRAY_VALUES[ARRAY_VALUES.length - 1] === '' || (ARRAY_VALUES[ARRAY_VALUES.length - 1]) === undefined) {
+    ARRAY_VALUES[0];
   }
   RESULT_BOX.style = "color: black";
   RESULT_BOX.appendChild(RESULT_STRING);
@@ -302,22 +696,16 @@ function renderResult(message) {
   ARRAY_VALUES = [];
 }
 
+/*Switch lang function*/
+
 function handleSwitchLang() {
   if (LANG_STATE_ENG) {
     SWITCH_LANG_BTN.classList.add("switch-on");
 
     MAIN_HEADER_TEXT.innerText = "Обработчик для строк и чисел";
     INPUT_HEADER_TEXT.innerText = "Введите текст:";
-    STRING_MENU_TEXT.innerText = "Активировать меню для строк";
-    COUNT_LETTERS_TEXT.innerText = "Кол-во строчных и прописных";
-    MAX_WORD_TEXT.innerText = "Самое длинное слово";
-    NUMBERS_MENU_TEXT.innerText = "Активировать меню для чисел";
-    NUMBERS_MENU_HEADER_TEXT.innerText = "Меню чисел:";
-    EVEN_TEXT.innerText = "Четное";
-    NOT_EVEN_TEXT.innerText = "Нечетное";
-    MIN_MAX_CHECKBOX_TEXT.innerText = "Найти Макс/Мин значение";
-    MAX_VAL_TEXT.innerText = "Макс. значение";
-    MIN_VAL_TEXT.innerText = "Мин. значение";
+    STRING_MENU_TEXT.innerText = "Активировать строки";
+    NUMBERS_MENU_TEXT.innerText = "Активировать числа";
     HANDLE_BTN.innerText = "Обработать";
     RESULT_TEXT.innerText = "Результат:"
     PALLETE_CHECKBOX_TEXT.innerText = "Изменить цветовой стиль";
@@ -329,15 +717,7 @@ function handleSwitchLang() {
     MAIN_HEADER_TEXT.innerText = "Handler for strings and numbers";
     INPUT_HEADER_TEXT.innerText = "Enter Text:";
     STRING_MENU_TEXT.innerText = "Activate strings menu";
-    COUNT_LETTERS_TEXT.innerText = "Count letter cases";
-    MAX_WORD_TEXT.innerText = "Get max word(s)";
-    NUMBERS_MENU_TEXT.innerText = "Activate number menu";
-    NUMBERS_MENU_HEADER_TEXT.innerText = "Number menu:";
-    EVEN_TEXT.innerText = "Even";
-    NOT_EVEN_TEXT.innerText = "Not even";
-    MIN_MAX_CHECKBOX_TEXT.innerText = "Find Max/Min value";
-    MAX_VAL_TEXT.innerText = "Max Value";
-    MIN_VAL_TEXT.innerText = "Min Value";
+    NUMBERS_MENU_TEXT.innerText = "Activate numbers menu";
     HANDLE_BTN.innerText = "Handle";
     RESULT_TEXT.innerText = "The result is:"
     PALLETE_CHECKBOX_TEXT.innerText = "Activate pallete bar";
@@ -346,36 +726,30 @@ function handleSwitchLang() {
   }
 }
 
-function activatePalleteBar() {
-  if (PALLETE_CHECKBOX.checked) {
-    PALLETE_BAR.classList.remove("hidden")
-  } else {
-    PALLETE_BAR.classList.add("hidden")
-  }
-}
+/*Change theme function*/
 
 function toogleColor(elem) {
-  var value = elem.id;
-  switch (document.getElementById(value).checked) {
-    case value === "themeBlue":
+  let flag = elem.id;
+  switch (document.getElementById(flag).checked) {
+    case flag === "themeBlue":
       PALLETE_BAR.style = "background-color: lightblue"
       BODY_CONTAINER.style = "background-color: aliceblue"
       MAIN_CONTAINER.style = "background-color: lightskyblue"
       HANDLE_BTN.style = "background-color: #81b3d2"
       break;
-    case value === "themeGreen":
+    case flag === "themeGreen":
       PALLETE_BAR.style = "background-color: #f58669"
       BODY_CONTAINER.style = "background-color: #20B2AA"
       MAIN_CONTAINER.style = "background-color: LIMEGREEN"
       HANDLE_BTN.style = "background-color: #6B8E23"
       break;
-    case value === "themeYellow":
+    case flag === "themeYellow":
       PALLETE_BAR.style = "background-color: #D2691E"
       BODY_CONTAINER.style = "background-color: #FFE4B5"
       MAIN_CONTAINER.style = "background-color: #FFD700"
       HANDLE_BTN.style = "background-color: #DAA520"
       break;
-    case value === "themeDark":
+    case flag === "themeDark":
       PALLETE_BAR.style = "background-color: #483D8B"
       BODY_CONTAINER.style = "background-color: #A9A9A9"
       MAIN_CONTAINER.style = "background-color: #708090"
@@ -387,13 +761,5 @@ function toogleColor(elem) {
       MAIN_CONTAINER.style = "background-color: LIGHTSALMON";
       HANDLE_BTN.style = "background-color: FIREBRICK"
   }
-}
-
-function changeEven() {
-  var selectedOption = EVEN_SELECT.value;
-  if (selectedOption === "not_even") {
-    EVEN_SELECT.selectedIndex = 1;
-  } else {
-    EVEN_SELECT.selectedIndex = 0;
-  }
+  changeBarHeight()
 }

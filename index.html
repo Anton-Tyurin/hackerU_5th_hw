@@ -3,14 +3,14 @@
 
 <head>
   <meta charset="utf-8">
-  <link rel="stylesheet" href="/css/style.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-  <title>HW 4</title>
+  <title>HW 5</title>
 </head>
 
 <body id="bodyContainer">
   <h1 class="main_header" id="mainHeader">Handler for strings and numbers</h1>
-  <div class="container" id="mainContainer">
+  <div class="container flex" id="mainContainer">
     <div class="bar hidden" id="palleteBar">
       <label class="container_radio">
         <input type="radio" name="color" value="default" checked id="themeDefault" onclick="toogleColor(this)">
@@ -36,47 +36,21 @@
     <div class="input_box">
       <br>
       <label for="sampleInput" id="inputHeader" class="input_header">Enter Text:</label>
-      <br>
       <input type="text" name="sampleInput" class="main_input" id="sampleInput">
-      <br>
-      <input type="checkbox" name="stringFlag" id="stringFlag" onchange="displayStringMenu()">
-      <label for="stringFlag" id="stringFlagDescription">Activate strings menu</label>
-      <div class="flex hidden" id=stringMenu>
-        <div>
-          <input type="checkbox" name="countLetters" id="countLetters" onchange="displayCountLetters()">
-          <label for="countLetters" id="countLettersDescription">Count letter cases</label>
+      <div class="additional_input hidden flex" id="additionalInput">
+      </div>
+      <div class="data_type_bar flex">
+        <div class="data_bar_strings">
+          <input type="radio" name="stringFlag" id="stringFlag" onchange="displayStringMenu()">
+          <label for="stringFlag" id="stringFlagDescription">Activate strings menu</label>
         </div>
-        <div>
-          <input type="checkbox" name="maxWord" id="maxWord" onchange="displayMaxWord()">
-          <label for="maxWord" id="maxWordDescription">Get max word(s)</label>
+        <div class="data_bar_nubmers">
+          <label for="numbersMenu" id="numbersMenuDescription">Activate numbers menu</label>
+          <input type="radio" name="numbersMenu" id="numbersMenu" onchange="displayNumbersMenu()">
         </div>
       </div>
-      <br>
-      <input type="checkbox" name="numbersMenu" id="numbersMenu" onchange="displayNumbersMenu()">
-      <label for="numbersMenu" id="numbersMenuDescription">Activate number menu</label>
-      <p class="numbers_header hidden" id="numbersMenuHeader">Number menu:</p>
-      <div class="numbers_menu flex hidden" id="numbersMenuBox">
-        <div class="select_box">
-          <select сlass="selectEven" id="selectEven" onchange="changeEven()">
-            <option value="even" id="evenDescription">Even</option>
-            <option value="not_even" id="notEvenDescription">Not even</option>
-          </select>
-        </div>
-        <div class="radio_box">
-          <input type="checkbox" name="minMaxVal" id="minMaxVal" onchange="getMinMaxVal()">
-          <label for="minMaxVal" id="minMaxValDescription">Find Max/Min value</label>
-          <div class="hidden" id="maxValBox">
-            <input type="radio" id="maxVal" name="drone" value="max" checked>
-            <label for="max" id="maxValDescription">Max Value</label>
-          </div>
-          <div class="hidden" id="minValBox">
-            <input type="radio" id="minVal" name="drone" value="min">
-            <label for="min" id="minValDescription">Min Value</label>
-          </div>
-        </div>
+      <div class="options_menu hidden flex" id="optionsMenu">
       </div>
-      <br>
-      <br>
       <button type="button" class="submit_btn" name="button" onclick="handler()" id="hadleBtn">Handle</button>
     </div>
     <div class="result_box" id="resultBox">
@@ -97,7 +71,7 @@
       <button class="switch-btn" id="switchBtn" onclick="handleSwitchLang()">
     </div>
   </footer>
-  <script type="text/javascript" src="/js/script.js"></script>
+  <script type="text/javascript" src="js/script.js"></script>
 </body>
 
 </html>

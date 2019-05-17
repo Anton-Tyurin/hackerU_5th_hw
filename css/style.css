@@ -18,7 +18,6 @@ body {
   border: 2px solid black;
   border-radius: 5px;
   display: flex;
-  align-items: center;
   background-color: LIGHTSALMON;
   position: relative;
 }
@@ -125,8 +124,7 @@ body {
 }
 
 .result_box {
-  margin-left: 5px;
-  min-height: 160px;
+  margin: 70px 0 0 5px;
   width: 460px;
   max-width: 460px;
 }
@@ -136,10 +134,34 @@ body {
 }
 
 .main_input {
-  text-align: center;
   width: 440px;
-  margin-left: 5px;
+  margin: 0 5px 5px
+}
+.main_input,
+.additional_input{
+ text-align: center;
+}
+
+
+.additional_input{
+  margin: 5px 0 5px;
+}
+
+.main_input,
+.input_a_range input,
+.input_b_range input{
   border-radius: 5px;
+}
+
+.input_a_range input,
+.input_b_range input{
+  width: 45px;
+}
+
+.input_a_range,
+.input_b_range {
+  margin: 0 5px;
+  width: 75px;
 }
 
 .input_header {
@@ -150,10 +172,19 @@ body {
   padding-left: 5px
 }
 
+.input_box .flex{
+  justify-content: space-between;
+}
+
+.input_box .additional_input{
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
 .flex {
   display: flex;
   justify-content: space-around;
-  }
+}
 
 .numbers_menu {
   align-items: center;
@@ -178,6 +209,10 @@ body {
   flex-grow: 6;
 }
 
+.hiddenBar {
+  display: hidden;
+}
+
 .hidden {
   display: none;
 }
@@ -192,12 +227,13 @@ label {
 }
 
 .submit_btn {
+  margin-top: 15px;
   font-size: 20px;
   font-weight: 400;
   line-height: 22px;
   display: inline-block;
   width: 7.625em;
-  margin: 0 0 0 5px;
+  margin: 15px 0 0 5px;
   padding: 6px 0;
   text-align: center;
   text-decoration: none;
@@ -271,4 +307,27 @@ label {
 .switch-on::after {
     left: 26px;
     background: linear-gradient(#fff 33%, #0039a6 33%, #0039a6 66%, #d52b1e 66%);
+}
+
+
+.options_menu{
+  margin: 15px 0;
+}
+
+.container .options_menu{
+  justify-content: space-between;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.options_item{
+  width: 225px;
+}
+
+.textSentence{
+  width: 445px;
+  height: 70px;
+  margin: auto;
+  border-radius: 5px;
+  resize: none;
 }
