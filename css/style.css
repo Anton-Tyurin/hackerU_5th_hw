@@ -72,7 +72,11 @@ body {
   border-radius: 50%;
 }
 
-.container_radio:hover input ~ .checkmark {
+.container_radio:hover input ~ .checkmark,
+.change_pallete_box:hover input ~ .checkmark_pallete,
+.data_bar_strings:hover input ~ .checkmark_bar_strings,
+.data_bar_numbers:hover input ~ .checkmark_bar_numbers,
+.options_item:hover input ~ .checkmark_options  {
   background-color: #ccc;
 }
 
@@ -96,13 +100,21 @@ body {
   background-color: GRAY;
 }
 
-.checkmark:after {
+.checkmark:after,
+.checkmark_pallete:after,
+.checkmark_bar_numbers:after,
+.checkmark_bar_strings:after,
+.checkmark_options:after {
   content: "";
   position: absolute;
   display: none;
 }
 
-.container_radio input:checked ~ .checkmark:after {
+.container_radio input:checked ~ .checkmark:after,
+.change_pallete_box input:checked ~ .checkmark_pallete:after,
+.data_bar_strings input:checked ~ .checkmark_bar_strings:after,
+.data_bar_numbers input:checked ~ .checkmark_bar_numbers:after,
+.options_item input:checked ~ .checkmark_options:after {
   display: block;
 }
 
@@ -115,12 +127,177 @@ body {
 	background: white;
 }
 
+.options_item{
+  display: block;
+  position: relative;
+  padding-left: 30px;
+  width: 195px;
+}
+
+.options_item input{
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 16px;
+  width: 16px;
+  border-radius: 2px;
+  left: 6px;
+  top: -1px;
+  z-index: 5;
+}
+
+
+.checkmark_options {
+  position: absolute;
+  top: 2px;
+  left: 11px;
+  height: 15px;
+  width: 15px;
+  background-color: #eee;
+  border-radius: 50%;
+}
+.checkmark_options:after {
+  top: 3px;
+  left: 3px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: dodgerblue;
+}
+
+.change_pallete_box{
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.change_pallete_box input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 21px;
+  width: 21px;
+  border-radius: 2px;
+  left: 6px;
+  top: -3px;
+  z-index: 5;
+}
+
+.data_bar_strings input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 21px;
+  width: 21px;
+  border-radius: 2px;
+  left: 6px;
+  top: -3px;
+  z-index: 5;
+}
+
+.data_bar_numbers input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 21px;
+  width: 21px;
+  border-radius: 2px;
+  right: 6px;
+  top: -3px;
+  z-index: 5;
+}
+
+.data_bar_strings .checkmark_bar_strings:after {
+  top: 4px;
+  left: 4px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: SANDYBROWN;
+}
+
+
+.data_bar_numbers .checkmark_bar_numbers:after {
+  top: 4px;
+  right: 4px;
+  width: 12px;
+  height: 12px;
+	border-radius: 50%;
+	background: SANDYBROWN;
+}
+
+.data_bar_numbers{
+  display: block;
+  position: relative;
+  padding-right: 40px;
+}
+
+.data_bar_strings{
+  display: block;
+  position: relative;
+  padding-left: 40px;
+}
+
+.checkmark_pallete {
+  position: absolute;
+  top: 0px;
+  left: 10px;
+  height: 20px;
+  width: 20px;
+  background-color: #eee;
+  border-radius: 3px;
+}
+
+.checkmark_bar_strings {
+  position: absolute;
+  top: 0px;
+  left: 10px;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+	background: #eee;
+}
+
+.checkmark_bar_numbers {
+  position: absolute;
+  top: 0px;
+  right: 10px;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+	background: #eee;
+}
+
+.change_pallete_box input:checked ~ .checkmark_pallete {
+  background-color: #2196F3;
+}
+
+.change_pallete_box .checkmark_pallete:after {
+  left: 6px;
+  top: 2px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
 
 .input_box {
   padding: 50px 0 50px;
   border-right: 1px solid black;
   width: 460px;
   min-height: 200px;
+}
+
+.data_type_bar{
+  padding-top: 5px;
 }
 
 .result_box {
@@ -320,9 +497,7 @@ label {
   align-items: center;
 }
 
-.options_item{
-  width: 225px;
-}
+
 
 .textSentence{
   width: 445px;

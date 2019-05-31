@@ -1,4 +1,28 @@
 console.clear()
+// Key
+var KEY_ENTER = 13;
+
+function getFocus() {
+  if (INPUT_STRING.classList.contains("hidden")) {
+    document.getElementById("textSentence").focus();
+  } else {
+    INPUT_STRING.focus();
+  }
+}
+
+window.addEventListener("keydown", function(event) {
+  if (event.keyCode === KEY_ENTER) {
+    getFocus()
+    HANDLE_BTN.click();
+  }
+});
+
+function preventTextareaDefault(e) {
+  if (e.keyCode === 13 && !e.shiftKey) {
+    e.preventDefault();
+  };
+}
+
 /*For render options*/
 let OPTION_ID = "defaultOption";
 const OPTIONS_CONTAINER = document.getElementById('optionsMenu')
@@ -11,6 +35,10 @@ const ARRAY_OPTIONS_NUMBERS_LABLES = ["Default", "Get lesser than average", "Get
   "Get not even numbers", "Get max value", "Get min value", "Get two min values", "Get cleared by range",
   "Get sum after negative", "Get min by module"
 ]
+const ARRAY_OPTIONS_NUMBERS_LABLES_RUS = ["По умоланию", "Меньше среднего знач.", "Четные числа",
+  "Нечетные числа", "Макс. значение", "Мин. значение", "Два мин. знач.", "Обнулить в пределах",
+  "Сумма после отриц.", "Мин. по модулю"
+]
 
 /*For render options - strings*/
 const ARRAY_OPTIONS_STRINGS_ID = ["defaultOption", "maxSentence", "findAndReplase", "delDubSeparator",
@@ -19,6 +47,11 @@ const ARRAY_OPTIONS_STRINGS_ID = ["defaultOption", "maxSentence", "findAndReplas
 const ARRAY_OPTIONS_STRINGS_LABLES = ["Default", "Get max sentence",
   "Find and replace", "Delete duplicate separator",
   "Get array of numbers", "Find is it palindrome", "Get amount of cases", "Get max word"
+]
+
+const ARRAY_OPTIONS_STRINGS_LABLES_RUS = ["По умолчанию", "Наибольшее предл.",
+  "Найти и заменить", "Удалить повт. разделит.",
+  "Массив чисел", "Провер. пандиломы", "Кол-во регистров", "Наибольшее слово"
 ]
 
 /*For render result*/
@@ -82,6 +115,22 @@ String.prototype.reverse = function() {
 
 String.prototype.replaсeMy = function(targetString, replaceString) {
   let str = this;
+  if (document.getElementById("targetInput").value.length === 0 ||
+    document.getElementById("replaceInput").value.length === 0
+  ) {
+    if ((targetString === undefined && document.getElementById("targetInput").value.length === 0) &&
+      (replaceString === undefined && document.getElementById("replaceInput").value.length === 0)) {
+      LANG_STATE_ENG ? str = "You didn't write replace and target String" :
+        str = "Вы не ввели строку для замены и новое значение";
+    } else if (replaceString === undefined && document.getElementById("replaceInput").value.length === 0) {
+      LANG_STATE_ENG ? str = "You didn't write replace String" :
+        str = "Вы не ввели строку для замены";
+    } else if (targetString === undefined && document.getElementById("targetInput").value.length === 0) {
+      LANG_STATE_ENG ? str = "You didn't write target String" :
+        str = "Вы не ввели новое значение";
+    }
+    return str;
+  }
   let target = targetString === undefined ? document.getElementById("targetInput").value : targetString;
   let replace = replaceString === undefined ? document.getElementById("replaceInput").value : replaceString;
   let pos = 0;
@@ -112,9 +161,6 @@ String.prototype.delDub = function(separators) {
             ++dubCounter;
             i++
           }
-          console.log(i);
-          console.log(dubCounter);
-          console.log("here");
           str.splice(start, dubCounter + 1);
           dubCounter = 0;
           start = 0;
@@ -141,7 +187,7 @@ function renderOptions(arrID, arrValues) {
   for (var i = 0; i < arrID.length; i++) {
     strResult += '<div class="options_item">' +
       '<input type="radio" class="options_radio" name="option" value="' + arrID[i] + '" id="' + arrID[i] + '" onclick="toogleOptionID(this)">' +
-      '<label for="' + arrID[i] + '">' + arrValues[i] + '</label>' + '</div>'
+      '<label for="' + arrID[i] + '">' + arrValues[i] + '</label>' + '<span class="checkmark_options">' + '</span>' + '</div>'
   }
   OPTIONS_CONTAINER.innerHTML = strResult;
   document.getElementById("defaultOption").checked = true;
@@ -162,13 +208,24 @@ function renderAdditionalInput(type) {
   } else if (type === "maxSentence") {
     INPUT_STRING.classList.add("hidden");
     strResult = '<textarea rows="8" cols="80" class="textSentence" id="textSentence">' + '</textarea>'
+    document.addEventListener("keydown", function(event) {
+      if (event.keyCode === KEY_ENTER && !event.shiftKey) {
+        event.preventDefault();
+      };
+    })
   } else if (type === "findAndReplase") {
-    strResult = '<label for="targetInput" id="inputHeader" class="input_header">Enter target to replace:</label>' +
+    LANG_STATE_ENG ? strResult = '<label for="targetInput" id="inputHeader" class="input_header">Enter target to replace:</label>' +
       '<input type="text" name="targetInput" class="main_input" id="targetInput">' +
       '<label for="replaceInput" id="inputHeader" class="input_header">Enter text to replace:</label>' +
+      '<input type="text" name="replaceInput" class="main_input" id="replaceInput">' :
+      strResult = '<label for="targetInput" id="inputHeader" class="input_header">Введите текст к замене:</label>' +
+      '<input type="text" name="targetInput" class="main_input" id="targetInput">' +
+      '<label for="replaceInput" id="inputHeader" class="input_header">Введите новый текст:</label>' +
       '<input type="text" name="replaceInput" class="main_input" id="replaceInput">'
   } else if (type === "delDubSeparator") {
-    strResult = '<label for="separatorInput" id="inputHeader" class="input_header">Enter separators:</label>' +
+    LANG_STATE_ENG ? strResult = '<label for="separatorInput" id="inputHeader" class="input_header">Enter separators:</label>' +
+      '<input type="text" name="separatorInput" class="main_input" id="separatorInput">' :
+      strResult = '<label for="separatorInput" id="inputHeader" class="input_header">Введите разделители:</label>' +
       '<input type="text" name="separatorInput" class="main_input" id="separatorInput">'
   }
   ADDITIONAL_INPUT.innerHTML = strResult;
@@ -199,7 +256,6 @@ function handler() {
     if (validateString() === false) {
       return false;
     }
-
     switch (document.getElementById(OPTION_ID).checked) {
       case OPTION_ID === "maxSentence":
         ARRAY_VALUES = getMaxSentence(ARRAY_VALUES);
@@ -207,7 +263,6 @@ function handler() {
         break;
       case OPTION_ID === "findAndReplase":
         ARRAY_VALUES = ARRAY_VALUES.join(" ");
-        console.log(ARRAY_VALUES);
         ARRAY_VALUES = ARRAY_VALUES.replaсeMy();
         renderResult();
         break;
@@ -305,7 +360,7 @@ function changeBarHeight() {
 function displayNumbersMenu() {
   if (NUMBERS_MENU.checked) {
     OPTIONS_CONTAINER.classList.remove("hidden");
-    renderOptions(ARRAY_OPTIONS_NUMBERS_ID, ARRAY_OPTIONS_NUMBERS_LABLES)
+    renderOptions(ARRAY_OPTIONS_NUMBERS_ID, (LANG_STATE_ENG ? ARRAY_OPTIONS_NUMBERS_LABLES : ARRAY_OPTIONS_NUMBERS_LABLES_RUS))
     changeBarHeight();
     STRING_MENU.checked = false;
 
@@ -319,8 +374,7 @@ function displayNumbersMenu() {
 function displayStringMenu() {
   if (STRING_MENU.checked) {
     OPTIONS_CONTAINER.classList.remove("hidden");
-    renderOptions(ARRAY_OPTIONS_STRINGS_ID, ARRAY_OPTIONS_STRINGS_LABLES)
-    console.log(PALLETE_BAR.style.heigth);
+    renderOptions(ARRAY_OPTIONS_STRINGS_ID, (LANG_STATE_ENG ? ARRAY_OPTIONS_STRINGS_LABLES : ARRAY_OPTIONS_STRINGS_LABLES_RUS))
     changeBarHeight();
     NUMBERS_MENU.checked = false;
   } else {
@@ -349,6 +403,11 @@ function validateString() {
     }
   } else {
     stringToArr = INPUT_STRING.value.split("")
+  }
+  if (stringToArr === undefined || stringToArr.length === 0) {
+    LANG_STATE_ENG ? renderResult("Empty String") :
+      renderResult("Пустая строка");
+    return false;
   }
   let temp = [];
   for (var i = 0; i < stringToArr.length; i++) {
@@ -433,7 +492,7 @@ function getMaxSentence(arr) {
   let maxLength;
   let parsedArr = arr.join("").split("");
   let result = [];
-  let temp = []
+  let temp = [];
   for (var i = 0; i < parsedArr.length; i++) {
     if (parsedArr[i] === ".") {
       result.push(temp.join(""));
@@ -441,6 +500,10 @@ function getMaxSentence(arr) {
     } else {
       temp.push(parsedArr[i]);
     }
+  }
+  if (temp.length > 0) {
+    result.push(temp.join(""));
+    temp = [];
   }
   maxLength = result[0].length;
   for (var i = 0; i < result.length; i++) {
@@ -450,25 +513,27 @@ function getMaxSentence(arr) {
       positionOfMax[0] = i + 1;
     } else if (result[i].length === maxLength && result.length > 1) {
       positionOfMax.push(i + 1)
+    } else if (result.length === 1) {
+      positionOfMax = i + 1;
     }
   }
-  return "position of max sentences: " + positionOfMax;
+  return LANG_STATE_ENG ? "position of max sentences: " + positionOfMax : "позиция самого длинного предложения (предложений): " + positionOfMax;
 }
 
 function checkPandilome(arr) {
   let middleOfArr;
   let parsedArr = arr.join("").split("");
   if (parsedArr.length % 2 === 1) {
-    return "Not pandilome!"
+    return LANG_STATE_ENG ? "Not pandilome!" : "Не пандилома!"
   }
   middleOfArr = parsedArr.length / 2;
   parsedArr = parsedArr.join("");
   let firstHalf = parsedArr.substring(0, middleOfArr)
   let secondHalf = parsedArr.substring(middleOfArr).reverse();
   if (firstHalf === secondHalf) {
-    return arr + " is pandilome!"
+    return LANG_STATE_ENG ? arr + " is pandilome!" : arr + " пандилома!"
   } else {
-    return arr + " is not pandilome!"
+    return LANG_STATE_ENG ? arr + " is not pandilome!" : arr + " не пандилома!"
   }
 }
 
@@ -510,7 +575,7 @@ function getNumbersArr(arr) {
     }
   }
   if (result.length < 1) {
-    return "there is no numbers"
+    return LANG_STATE_ENG ? "there is no numbers" : "нет чисел"
   }
   return result
 }
@@ -596,7 +661,8 @@ function validateNumber() {
   if ((temp.length >= 1 || ARRAY_VALUES.length >= 1) && temp[0] !== undefined) {
     ARRAY_VALUES.push(+temp.join(""));
   } else {
-    renderResult("The array is empty or illegal symbol (check for additional space at the end of string)");
+    renderResult(LANG_STATE_ENG ? "The array is empty or illegal symbol (check for additional space at the end of string)" :
+      "Массив пуст или содержит запрещенные символы (проверьте наличие пробела в конце строки)");
     return false;
   }
 }
@@ -616,7 +682,8 @@ function compareNumericAbs(array) {
       min_elem = array[i];
     }
   }
-  return "position of minimal element (" + min_elem + ") is: " + position;
+  return LANG_STATE_ENG ? "position of minimal element (" + min_elem + ") is: " + position :
+    "позиция наименьшего элемента (" + min_elem + "): " + position;
 }
 
 
@@ -628,7 +695,7 @@ function getEven(arr) {
 
 function getNotEven(arr) {
   return arr.filter(function(number) {
-    return number % 2 === 1;
+    return Math.abs(number % 2) === 1;
   });
 }
 
@@ -660,7 +727,8 @@ function sumAfterMinus(array) {
     }
   }
   if (result.length < 1) {
-    return renderResult("Result is empty. Probably you didn't use negative numbers or use only one.")
+    return LANG_STATE_ENG ? renderResult("Result is empty. Probably you didn't use negative numbers or use only one.") :
+      renderResult("Результат пуст. Возможно, Вы не использовали отрицательные числа или использовали только одно")
   }
   return result.reduce(function(acc, item) {
     return acc + Math.abs(item);
@@ -669,11 +737,14 @@ function sumAfterMinus(array) {
 
 function getClearedArr(array, a, b) {
   if (array.length === 0) {
-    return renderResult("The array is empty")
+    return LANG_STATE_ENG ? renderResult("The array is empty") :
+      renderResult("Массив пуст")
   } else if (a === "" || a === " " || !(isFinite(a))) {
-    return renderResult("a range is illegal")
+    return LANG_STATE_ENG ? renderResult("a range is illegal") :
+      renderResult("Запрещенный символ а")
   } else if (b === "" || b === " " || !(isFinite(b))) {
-    return renderResult("b range is illegal")
+    return LANG_STATE_ENG ? renderResult("b range is illegal") :
+      renderResult("Запрещенный символ b")
   }
   for (var i = 0; i < array.length; i++) {
     if (array[i] >= a && array[i] <= b) {
@@ -723,6 +794,11 @@ function handleSwitchLang() {
     PALLETE_CHECKBOX_TEXT.innerText = "Activate pallete bar";
 
     LANG_STATE_ENG = true;
+  }
+  if (NUMBERS_MENU.checked) {
+    displayNumbersMenu()
+  } else if (STRING_MENU.checked) {
+    displayStringMenu()
   }
 }
 
